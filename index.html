@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .main{
+            text-align: center;
+        }
+        .box{
+            width: 350px;
+            background:cyan;
+            padding: 20px;
+            text-align: center;
+            margin: auto;
+            margin-top: 1%;
+            color:  black;
+            font-family: 'Century Gothic';
+        }
+        table {
+        border-collapse: collapse;
+        position: relative;
+        width:50%;
+        margin: 0 auto; 
+        border:1px solid;
+        text-align:center"
+      }
+      
+        td, th {
+        border: 1px solid black;
+        text-align: center;
+        padding: 2px;
+      }
+      </style>
+</head>
+<body bgcolor="white">
+    <div id="loading">LOADING.....</div>
+    <div class="box">
+    <div class="main" id="container" hidden>
+    <img
+    width="100"
+    height="100"
+    id="img">
+    <h2 id="name"></h2>
+    <p id="bio"></p>
+    <h5 id="followers"></h5>
+    <h5 id="following"></h5>
+    <p>Find me on <a id="githublink">GitHub</a></p>
+    <a class="twitter-timeline" data-width="320" data-height="320" data-theme="light" href="https://twitter.com/pradipthapa_?ref_src=twsrc%5Etfw">Tweets by pradipthapa_</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <div id="response"></div>
+</div>
+    <script>
+          fetch("https://api.github.com/users/officialpradip")
+    .then(response => response.json())
+    .then(function(data){
+        console.log(data)
+
+        let followersCount = data['followers']
+        let followersInfo = `I have been followed by ${followersCount} people`
+        /*(``) js string interpolation*/
+        let followingCount = data['following']
+        let followingInfo = `I have followed ${followingCount} people`
+
+        document.getElementById('img').src =data['avatar_url']
+        document.getElementById('name').textContent =data['name']
+        document.getElementById('bio').textContent = data['bio']
+        document.getElementById('followers').textContent = followersInfo
+        document.getElementById('following').textContent = followingInfo
+        document.getElementById('githublink').href = data['html_url']
+        document.getElementById('container').hidden = false
+        document.getElementById('loading').hidden = true
+    })
+     fetch('https://api.github.com/users/officialpradip/repos')
+                .then(response => response.json())
+                .then(users => {
+                    let output = '<h2>My Projects</h2>';
+                    output += '';
+                    users.forEach(function(user) {
+                        output += `
+                        <table>
+                            <tr>
+                                <th>ID</th>
+                                <th>Repo Path</th>    
+                            </tr>
+                            <tr>
+                                <td>${user.id}</td>
+                                <td>${user.full_name}</td>
+                              </tr>
+                        </table>
+                        `;
+                    });
+                    output += ''
+                    document.getElementById("response").innerHTML = output;
+                    
+                });
+        
+</script>
+</body>
+</html>
